@@ -37,15 +37,15 @@ def PairPerturb(X,r=.5,k=0):
     Y[k] = Perturb(Y[k],r)
     return Y
 
-def DataPerturb(data,para, res = 50):
+def DataPerturb(data,para):
     data_new = torch.empty(0,2,data.size()[2]).cuda()
     para_new = torch.empty(0,2,2).cuda()
     dist_new = torch.empty(0,1).cuda()
     for n in range(data.size()[0]):
         for j in range(10):
             for i in range(2):
-                j0 = torch.empty(1).uniform_(1,res).cuda()
-                r = j0**(-2)
+                j0 = torch.empty(1).uniform_(0,1).cuda()
+                r = j0**(2)
                 data_new = torch.cat((data_new,PairPerturb(data[n,:,:],r,i).unsqueeze(0)))
                 para_new = torch.cat((para_new,para[n,:,:].unsqueeze(0)))
                 dist_new = torch.cat((dist_new,r.unsqueeze(0)))
